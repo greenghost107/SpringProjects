@@ -1,5 +1,6 @@
-package com.example.Transportation;
+package com.example.Transportation.repository;
 
+import com.example.Transportation.domain.Driver;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

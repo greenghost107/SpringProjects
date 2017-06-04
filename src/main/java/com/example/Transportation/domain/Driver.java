@@ -1,14 +1,16 @@
-package com.example.Transportation;
+package com.example.Transportation.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by Michael on 6/4/2017.
  */
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class,property = "@driver")
 public class Driver {
 
     @Id
@@ -17,7 +19,8 @@ public class Driver {
 
     private String name;
 
-//    private List<Training> trainings;
+    @OneToMany(mappedBy="driver",targetEntity = Event.class,cascade = CascadeType.REMOVE)
+    private List<Event> events;
 
     public Driver(){}
 

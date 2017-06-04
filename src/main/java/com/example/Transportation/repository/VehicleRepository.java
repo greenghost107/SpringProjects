@@ -1,5 +1,6 @@
-package com.example.Transportation;
+package com.example.Transportation.repository;
 
+import com.example.Transportation.domain.Vehicle;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
