@@ -9,21 +9,21 @@ import javax.persistence.Id;
  * Created by Michael on 6/4/2017.
  */
 @Entity
-public class Driver {
-
+public class Event {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-//    private List<Training> trainings;
+    private Events event_id;
 
-    public Driver(){}
+    public Event(){}
 
-    public Driver(String name)
+    public Event(String eventName, Events events)
     {
-        this.name = name;
+        this.name = eventName;
+        this.event_id = events;
     }
 
     public Long getId() {
@@ -40,5 +40,13 @@ public class Driver {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Events getEvent_id() {
+        return event_id;
+    }
+
+    public void setEvent_id(Events event_id) {
+        this.event_id = event_id;
     }
 }

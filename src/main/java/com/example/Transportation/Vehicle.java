@@ -9,8 +9,7 @@ import javax.persistence.Id;
  * Created by Michael on 6/4/2017.
  */
 @Entity
-public class Driver {
-
+public class Vehicle {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
@@ -19,9 +18,9 @@ public class Driver {
 
 //    private List<Training> trainings;
 
-    public Driver(){}
+    public Vehicle(){}
 
-    public Driver(String name)
+    public Vehicle(String name)
     {
         this.name = name;
     }
