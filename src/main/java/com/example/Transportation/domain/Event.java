@@ -6,13 +6,17 @@ import javax.persistence.*;
  * Created by Michael on 6/4/2017.
  */
 @Entity
-@IdClass(EventId.class)
+//@IdClass(EventId.class)
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public class Event {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Long id;
+//    @Id
     private Long driver_id;
-
-    @Id
+//
+//    @Id
     private Long vehicle_id;
 
     private String city;

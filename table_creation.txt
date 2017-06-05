@@ -1,0 +1,60 @@
+CREATE TABLE driver
+(
+  id serial NOT NULL,
+  name text NOT NULL,
+  CONSTRAINT driver_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE driver
+  OWNER TO postgres;
+  
+  
+  
+CREATE TABLE vehicle
+(
+  id serial NOT NULL,
+  name text NOT NULL,
+  licenseplate text NOT NULL,
+  CONSTRAINT vehicle_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE vehicle
+  OWNER TO postgres;
+  
+  
+  
+CREATE TABLE event
+(
+  dtype text NOT NULL,
+  id serial NOT NULL,
+  driver_id integer NOT NULL,
+  vehicle_id integer NOT NULL,
+  city text NOT NULL,
+  street text NOT NULL,
+  fine double precision,
+  notes text,
+  cause text,
+  driverlicense text,
+  drivername text,
+  otherdriverid text,
+  cartype text,
+  carcolor text,
+  carnumber text,
+  insurancecompany text,
+  CONSTRAINT event_pkey PRIMARY KEY (vehicle_id, driver_id),
+  CONSTRAINT driver_id_fk FOREIGN KEY (driver_id)
+      REFERENCES driver (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT vehicle_id_fk FOREIGN KEY (vehicle_id)
+      REFERENCES vehicle (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE event
+  OWNER TO postgres;

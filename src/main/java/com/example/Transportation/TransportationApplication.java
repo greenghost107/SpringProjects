@@ -1,5 +1,6 @@
-package com.example.Transportation.domain;
+package com.example.Transportation;
 
+import com.example.Transportation.domain.*;
 import com.example.Transportation.repository.DriverRepository;
 import com.example.Transportation.repository.EventRepository;
 import com.example.Transportation.repository.VehicleRepository;
@@ -43,7 +44,12 @@ public class TransportationApplication {
 
 			Driver driver = driverRepository.findByName("avi").get(0);
 			Vehicle vehicle = vehicleRepository.findByName("Audi").get(0);
-			eventRepository.save(new Event(driver,vehicle,"Ernest Simon","1"));
+			eventRepository.save(new Ticket(driver,vehicle,"Ernest Simon","1",12,"interrupted the traffic"));
+			 driver = driverRepository.findByName("igor").get(0);
+			 vehicle = vehicleRepository.findByName("Audi").get(0);
+			eventRepository.save(new TrafficTicket(driver,vehicle,"Ernest Simon","1", (float) 54.5,"interrupted the traffic","red light crossing"));
+
+			eventRepository.save(new Accident(driver,vehicle,"Ernest Simon","1","","Abdulah Naseraladin","8585466","Meclaren","Red","87-89-882","bituah yashir"));
 
 		};
 	}
