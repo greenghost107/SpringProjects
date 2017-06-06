@@ -1,10 +1,9 @@
 package com.example.Transportation.service;
 
-import com.example.Transportation.domain.Driver;
-import com.example.Transportation.domain.Event;
-import com.example.Transportation.domain.Vehicle;
+import com.example.Transportation.domain.*;
 import com.example.Transportation.repository.DriverRepository;
 import com.example.Transportation.repository.EventRepository;
+import com.example.Transportation.repository.TrainingRepository;
 import com.example.Transportation.repository.VehicleRepository;
 import com.example.Transportation.web.rest.DriverController;
 import org.slf4j.Logger;
@@ -33,6 +32,9 @@ public class ServiceImplementation {
     @Autowired
     VehicleRepository vehicleRepository;
 
+    @Autowired
+    TrainingRepository trainingRepository;
+
     public List<Driver> findAllDrivers() {
         log.info("Started findAllDrivers");
         return driverRepository.findAll();
@@ -46,6 +48,10 @@ public class ServiceImplementation {
     public List<Vehicle> findAllVehicles() {
         log.info("Started findAllEvents");
         return vehicleRepository.findAll();
+    }
+
+    public List<Training> findAllTrainings() {
+        return trainingRepository.findAll();
     }
 
     @Transactional
@@ -158,4 +164,41 @@ public class ServiceImplementation {
     }
 
 
+    public Ticket addTicket(long driver_id, long vehicle_id, String city, String street, float fine, String reasonForTicket) {
+        Driver driver = driverRepository.findOne(driver_id);
+        if (driver==null)
+            return null;
+        Vehicle vehicle = vehicleRepository.findOne(vehicle_id);
+        if (vehicle==null)
+            return null;
+        return eventRepository.save(new Ticket(driver,vehicle,city,street,fine,reasonForTicket));
+    }
+
+    public TrafficTicket addTrafficTicket(long driver_id, long vehicle_id, String city, String street, float fine, String reasonForTicket, String cause) {
+        TrafficTicketEnum trafficTicketEnum = convertCauseToEnum(cause);
+        Driver driver = driverRepository.findOne(driver_id);
+        if (driver==null)
+            return null;
+        Vehicle vehicle = vehicleRepository.findOne(vehicle_id);
+        if (vehicle==null)
+            return null;
+        return eventRepository.save(new TrafficTicket(driver,vehicle,city,street,fine,reasonForTicket,trafficTicketEnum));
+    }
+
+    private TrafficTicketEnum convertCauseToEnum(String cause) {
+        TrafficTicketEnum ans = null;
+        if (cause.equalsIgnoreCase("SPEEDING"))
+        {
+            ans = TrafficTicketEnum.SPEEDING;
+        }
+        else if (cause.equalsIgnoreCase("RED_LIGHT_CROSSING"))
+        {
+            ans = TrafficTicketEnum.RED_LIGHT_CROSSING;
+        }
+        else if (cause.equalsIgnoreCase("NOT_GIVING_RIGHT_OF_WAY"))
+        {
+            ans = TrafficTicketEnum.NOT_GIVING_RIGHT_OF_WAY;
+        }
+        return ans;
+    }
 }

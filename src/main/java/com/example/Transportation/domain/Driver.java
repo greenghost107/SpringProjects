@@ -12,7 +12,7 @@ import java.util.List;
  * Created by Michael on 6/4/2017.
  */
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class,property = "@driver")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Driver {
 
     @Id

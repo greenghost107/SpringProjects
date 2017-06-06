@@ -51,12 +51,12 @@ public class TransportationApplication {
 
 			Driver driver = driverRepository.findByName("avi").get(0);
 			Vehicle vehicle = vehicleRepository.findByName("Audi").get(0);
-			eventRepository.save(new Ticket(driver,vehicle,"Ernest Simon","1",12,"interrupted the traffic"));
+			eventRepository.save(new Ticket(driver,vehicle,"Be'er Sheva","Ernest Simon",12,"interrupted the traffic"));
 			 driver = driverRepository.findByName("igor").get(0);
 			 vehicle = vehicleRepository.findByName("Audi").get(0);
-			eventRepository.save(new TrafficTicket(driver,vehicle,"Ernest Simon","1", (float) 54.5,"interrupted the traffic",TrafficTicketEnum.RED_LIGHT_CROSSING));
+			eventRepository.save(new TrafficTicket(driver,vehicle,"Be'er Sheva","Ernest Simon", (float) 54.5,"interrupted the traffic",TrafficTicketEnum.RED_LIGHT_CROSSING));
 
-			eventRepository.save(new Accident(driver,vehicle,"Ernest Simon","1","","AbNaseraladin","8585466","Meclaren","Red","87-89-882","bituah yashir"));
+			eventRepository.save(new Accident(driver,vehicle,"Be'er Sheva","Ernest Simon","","AbNaseraladin","8585466","Meclaren","Red","87-89-882","bituah yashir"));
 
 			trainingRepository.save(new Training("continuing education program",new Date(117,4,1)));
 
