@@ -1,16 +1,22 @@
 package com.example.Transportation.domain;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Created by Michael on 6/5/2017.
  */
 @Entity
 @Table(name="Ticket")
+@DiscriminatorValue("Ticket")
 public class Ticket extends Event {
 
     private float fine;
+
+    @Size(max = 1000)
     private String notes;
 
     public Ticket(){}

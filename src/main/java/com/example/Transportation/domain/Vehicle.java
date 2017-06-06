@@ -1,6 +1,8 @@
 package com.example.Transportation.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -12,6 +14,8 @@ public class Vehicle {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    @Size(min = 2,max = 15)
     private String name;
 
     private String licenseplate;

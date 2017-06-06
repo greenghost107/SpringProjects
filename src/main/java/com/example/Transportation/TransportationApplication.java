@@ -3,12 +3,16 @@ package com.example.Transportation;
 import com.example.Transportation.domain.*;
 import com.example.Transportation.repository.DriverRepository;
 import com.example.Transportation.repository.EventRepository;
+import com.example.Transportation.repository.TrainingRepository;
 import com.example.Transportation.repository.VehicleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+import java.util.Calendar;
+import java.util.Date;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = {"com.example.Transportation"})
@@ -19,7 +23,7 @@ public class TransportationApplication {
 	}
 
 	@Bean
-	public CommandLineRunner demo(DriverRepository driverRepository, VehicleRepository vehicleRepository, EventRepository eventRepository){
+	public CommandLineRunner demo(DriverRepository driverRepository, VehicleRepository vehicleRepository, EventRepository eventRepository, TrainingRepository trainingRepository){
 		return (args)->
 		{
 			//clear the db
@@ -31,6 +35,9 @@ public class TransportationApplication {
 
 			if (eventRepository.count()>0)
 				eventRepository.deleteAll();
+
+			if (trainingRepository.count()>0)
+				trainingRepository.deleteAll();
 
 
 			driverRepository.save(new Driver("avi"));
@@ -47,9 +54,11 @@ public class TransportationApplication {
 			eventRepository.save(new Ticket(driver,vehicle,"Ernest Simon","1",12,"interrupted the traffic"));
 			 driver = driverRepository.findByName("igor").get(0);
 			 vehicle = vehicleRepository.findByName("Audi").get(0);
-			eventRepository.save(new TrafficTicket(driver,vehicle,"Ernest Simon","1", (float) 54.5,"interrupted the traffic","red light crossing"));
+			eventRepository.save(new TrafficTicket(driver,vehicle,"Ernest Simon","1", (float) 54.5,"interrupted the traffic",TrafficTicketEnum.RED_LIGHT_CROSSING));
 
-			eventRepository.save(new Accident(driver,vehicle,"Ernest Simon","1","","Abdulah Naseraladin","8585466","Meclaren","Red","87-89-882","bituah yashir"));
+			eventRepository.save(new Accident(driver,vehicle,"Ernest Simon","1","","AbNaseraladin","8585466","Meclaren","Red","87-89-882","bituah yashir"));
+
+			trainingRepository.save(new Training("continuing education program",new Date(117,4,1)));
 
 		};
 	}

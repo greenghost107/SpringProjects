@@ -31,7 +31,7 @@ CREATE TABLE event
 (
   dtype text NOT NULL,
   id serial NOT NULL,
-  driver_id integer NOT NULL,
+  id integer NOT NULL,
   vehicle_id integer NOT NULL,
   city text NOT NULL,
   street text NOT NULL,
@@ -45,8 +45,8 @@ CREATE TABLE event
   carcolor text,
   carnumber text,
   insurancecompany text,
-  CONSTRAINT event_pkey PRIMARY KEY (vehicle_id, driver_id),
-  CONSTRAINT driver_id_fk FOREIGN KEY (driver_id)
+  CONSTRAINT event_pkey PRIMARY KEY (vehicle_id, id),
+  CONSTRAINT driver_id_fk FOREIGN KEY (id)
       REFERENCES driver (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT vehicle_id_fk FOREIGN KEY (vehicle_id)

@@ -1,16 +1,22 @@
 package com.example.Transportation.domain;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Created by Michael on 6/5/2017.
  */
 @Entity
 @Table(name="Accident")
+@DiscriminatorValue("Accident")
 public class Accident extends Event{
     private String driverLicense;
+    @NotNull
+    @Size(min=2,max=15)
     private String driverName;
     private String otherDriverId;
 
