@@ -201,4 +201,16 @@ public class ServiceImplementation {
         }
         return ans;
     }
+
+    public Accident addNewAccident(long driver_id, long vehicle_id, String city, String street, String driverLicense, String driverName,
+                                   String otherDriverId, String carType, String carColor, String carNumber, String insuranceCompany)
+    {
+        Driver driver = driverRepository.findOne(driver_id);
+        if (driver==null)
+            return null;
+        Vehicle vehicle = vehicleRepository.findOne(vehicle_id);
+        if (vehicle==null)
+            return null;
+        return eventRepository.save(new Accident(driver,vehicle,city,street,driverLicense,driverName,otherDriverId,carType,carColor,carNumber,insuranceCompany));
+    }
 }

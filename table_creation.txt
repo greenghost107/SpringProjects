@@ -1,8 +1,8 @@
 CREATE TABLE driver
 (
-  id serial NOT NULL,
+  driver_id serial NOT NULL,
   name text NOT NULL,
-  CONSTRAINT driver_pkey PRIMARY KEY (id)
+  CONSTRAINT driver_pkey PRIMARY KEY (driver_id)
 )
 WITH (
   OIDS=FALSE
@@ -15,10 +15,10 @@ ALTER TABLE driver
   
 CREATE TABLE vehicle
 (
-  id serial NOT NULL,
+  driver_id serial NOT NULL,
   name text NOT NULL,
   licenseplate text NOT NULL,
-  CONSTRAINT vehicle_pkey PRIMARY KEY (id)
+  CONSTRAINT vehicle_pkey PRIMARY KEY (driver_id)
 )
 WITH (
   OIDS=FALSE
@@ -31,7 +31,7 @@ ALTER TABLE vehicle
 CREATE TABLE event
 (
   dtype text NOT NULL,
-  id serial NOT NULL,
+  driver_id serial NOT NULL,
   driver_id integer NOT NULL,
   vehicle_id integer NOT NULL,
   city text NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE event
   car_color text,
   car_number text,
   insurance_company text,
-  CONSTRAINT event_pkey PRIMARY KEY (id)
+  CONSTRAINT event_pkey PRIMARY KEY (driver_id)
 )
 WITH (
   OIDS=FALSE
@@ -68,3 +68,22 @@ CREATE TABLE training
   );
   ALTER TABLE training
     OWNER TO postgres;
+
+
+CREATE TABLE enrollment
+(
+  driver_id integer NOT NULL,
+  id integer NOT NULL,
+  CONSTRAINT enrollment_pkey PRIMARY KEY (driver_id, id),
+  CONSTRAINT driver_id_fk FOREIGN KEY (driver_id)
+      REFERENCES driver (driver_id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT training_id_fk FOREIGN KEY (id)
+      REFERENCES training (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE enrollment
+  OWNER TO postgres;

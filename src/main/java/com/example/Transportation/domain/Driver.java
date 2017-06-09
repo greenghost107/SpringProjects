@@ -1,8 +1,5 @@
 package com.example.Transportation.domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -17,7 +14,7 @@ public class Driver {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+    private Long driver_id;
 
     @NotNull
     @Size(min = 2,max = 15)
@@ -26,8 +23,8 @@ public class Driver {
     @OneToMany(mappedBy="driver",targetEntity = Event.class,cascade = CascadeType.REMOVE)
     private List<Event> events;
 
-
-//    private List<Training> trainings;
+    @OneToMany(mappedBy="driver",targetEntity = Enrollment.class,cascade = CascadeType.REMOVE)
+    private List<Enrollment> enrollments;
 
     public Driver(){}
 
@@ -36,12 +33,12 @@ public class Driver {
         this.name = name;
     }
 
-    public Long getId() {
-        return id;
+    public Long getDriver_id() {
+        return driver_id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setDriver_id(Long driver_id) {
+        this.driver_id = driver_id;
     }
 
     public String getName() {
@@ -52,15 +49,8 @@ public class Driver {
         this.name = name;
     }
 
-//    public Training addTraining(Training training)
-//    {
-//        this.trainings.add(training);
-//        return training;
+//    public void registerTraining(Training training) {
+//        trainings.add(training);
 //    }
-//
-//    @ManyToMany(cascade = CascadeType.ALL)
-//    @JoinTable(name = "driver_training", joinColumns = { @JoinColumn(name = "id") }, inverseJoinColumns = { @JoinColumn(name = "training_id") })
-//    public List<Training> getTrainings(){
-//        return this.trainings;
-//    }
+
 }

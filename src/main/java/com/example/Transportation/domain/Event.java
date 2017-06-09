@@ -38,7 +38,7 @@ public class Event {
 
     public Event(Driver driver,Vehicle vehicle,String city,String street)
     {
-        this.driver_id = driver.getId();
+        this.driver_id = driver.getDriver_id();
         this.vehicle_id = vehicle.getId();
         this.driver = driver;
         this.vehicle = vehicle;

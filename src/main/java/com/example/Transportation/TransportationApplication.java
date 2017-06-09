@@ -58,7 +58,9 @@ public class TransportationApplication {
 
 			eventRepository.save(new Accident(driver,vehicle,"Be'er Sheva","Ernest Simon","","AbNaseraladin","8585466","Meclaren","Red","87-89-882","bituah yashir"));
 
-			trainingRepository.save(new Training("continuing education program",new Date(117,4,1)));
+			Training training = trainingRepository.save(new Training("continuing education program",new Date(117,4,1)));
+//			driver.registerTraining(training);
+
 
 		};
 	}
