@@ -8,9 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +30,19 @@ public class TrainingController {
                 .map(driver -> new ResponseEntity<>(driver, HttpStatus.OK))
                 .orElseThrow(() -> new SpringException("no Trainings In DB"));
 
+    }
+
+//    @RequestMapping(value = "/add",method = RequestMethod.POST)
+//    public ResponseEntity<Training> addTraining(@RequestBody Training training)
+//    {
+//        return new ResponseEntity<Training>(service.addTraining(training),HttpStatus.OK);
+//    }
+
+
+    @RequestMapping(value = "/{trainingId}",method = RequestMethod.DELETE)
+    public ResponseEntity<Boolean> deleteTraining(@PathVariable("trainingId") long trainingId)
+    {
+        return new ResponseEntity<>(service.deleteTraining(trainingId),HttpStatus.OK);
     }
 
 

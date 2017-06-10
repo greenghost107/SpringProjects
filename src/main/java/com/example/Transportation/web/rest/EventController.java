@@ -93,4 +93,10 @@ public class EventController {
                 .orElseThrow(() -> new SpringException("Couldn't add Accident"));
     }
 
+    @RequestMapping(value = "/{eventId}",method = RequestMethod.DELETE)
+    public ResponseEntity<Boolean> deleteDriverFromTraining(@PathVariable("eventId") long eventId)
+    {
+        return new ResponseEntity<>(service.deleteEventForDriver(eventId),HttpStatus.OK);
+    }
+
 }

@@ -1,10 +1,7 @@
 package com.example.Transportation.service;
 
 import com.example.Transportation.domain.*;
-import com.example.Transportation.repository.DriverRepository;
-import com.example.Transportation.repository.EventRepository;
-import com.example.Transportation.repository.TrainingRepository;
-import com.example.Transportation.repository.VehicleRepository;
+import com.example.Transportation.repository.*;
 import com.example.Transportation.web.rest.DriverController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +12,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.transaction.Transactional;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Michael on 6/5/2017.
@@ -35,6 +33,9 @@ public class ServiceImplementation {
     @Autowired
     TrainingRepository trainingRepository;
 
+    @Autowired
+    EnrollmentRepository enrollmentRepository;
+
     public List<Driver> findAllDrivers() {
         log.info("Started findAllDrivers");
         return driverRepository.findAll();
@@ -48,6 +49,10 @@ public class ServiceImplementation {
     public List<Vehicle> findAllVehicles() {
         log.info("Started findAllEvents");
         return vehicleRepository.findAll();
+    }
+
+    public List<Enrollment> findAllEnrollemtns() {
+        return enrollmentRepository.findAll();
     }
 
     public List<Training> findAllTrainings() {
@@ -124,40 +129,35 @@ public class ServiceImplementation {
     public List<Event> findAllEventsOfTypes(String eventType) {
         List<Event> returnedList = new LinkedList<>();
         List<Event> eventList = eventRepository.findAll();
-        for (Event event:eventList){
+        for (Event event : eventList) {
             DiscriminatorValue discriminatorValue = event.getClass().getAnnotation(DiscriminatorValue.class);
-            if (discriminatorValue.value().equalsIgnoreCase(eventType))
-            {
+            if (discriminatorValue.value().equalsIgnoreCase(eventType)) {
                 returnedList.add(event);
             }
         }
-        if (returnedList.size()==0) {
+        if (returnedList.size() == 0) {
             return null;
         }
         return returnedList;
     }
 
     @Transactional
-    public List<Event> findEventsByEventTypeAndDriver(String eventType,String driverName)
-    {
+    public List<Event> findEventsByEventTypeAndDriver(String eventType, String driverName) {
         List<Event> returnedList = new LinkedList<>();
         List<Driver> driverList = driverRepository.findByName(driverName);
-        if (driverList.size()==0)
-        {
+        if (driverList.size() == 0) {
             System.out.println("No Drivers Found with this name");
             return null;
         }
         Driver driver = driverList.get(0);
         List<Event> eventList = eventRepository.findByDriver(driver);
-        for (Event event:eventList)
-        {
+        for (Event event : eventList) {
             DiscriminatorValue discriminatorValue = event.getClass().getAnnotation(DiscriminatorValue.class);
-            if (discriminatorValue.value().equalsIgnoreCase(eventType))
-            {
+            if (discriminatorValue.value().equalsIgnoreCase(eventType)) {
                 returnedList.add(event);
             }
         }
-        if (returnedList.size()==0) {
+        if (returnedList.size() == 0) {
             return null;
         }
         return returnedList;
@@ -166,51 +166,119 @@ public class ServiceImplementation {
 
     public Ticket addTicket(long driver_id, long vehicle_id, String city, String street, float fine, String reasonForTicket) {
         Driver driver = driverRepository.findOne(driver_id);
-        if (driver==null)
+        if (driver == null)
             return null;
         Vehicle vehicle = vehicleRepository.findOne(vehicle_id);
-        if (vehicle==null)
+        if (vehicle == null)
             return null;
-        return eventRepository.save(new Ticket(driver,vehicle,city,street,fine,reasonForTicket));
+        return eventRepository.save(new Ticket(driver, vehicle, city, street, fine, reasonForTicket));
     }
 
     public TrafficTicket addTrafficTicket(long driver_id, long vehicle_id, String city, String street, float fine, String reasonForTicket, String cause) {
         TrafficTicketEnum trafficTicketEnum = convertCauseToEnum(cause);
         Driver driver = driverRepository.findOne(driver_id);
-        if (driver==null)
+        if (driver == null)
             return null;
         Vehicle vehicle = vehicleRepository.findOne(vehicle_id);
-        if (vehicle==null)
+        if (vehicle == null)
             return null;
-        return eventRepository.save(new TrafficTicket(driver,vehicle,city,street,fine,reasonForTicket,trafficTicketEnum));
+        return eventRepository.save(new TrafficTicket(driver, vehicle, city, street, fine, reasonForTicket, trafficTicketEnum));
     }
 
     private TrafficTicketEnum convertCauseToEnum(String cause) {
         TrafficTicketEnum ans = null;
-        if (cause.equalsIgnoreCase("SPEEDING"))
-        {
+        if (cause.equalsIgnoreCase("SPEEDING")) {
             ans = TrafficTicketEnum.SPEEDING;
-        }
-        else if (cause.equalsIgnoreCase("RED_LIGHT_CROSSING"))
-        {
+        } else if (cause.equalsIgnoreCase("RED_LIGHT_CROSSING")) {
             ans = TrafficTicketEnum.RED_LIGHT_CROSSING;
-        }
-        else if (cause.equalsIgnoreCase("NOT_GIVING_RIGHT_OF_WAY"))
-        {
+        } else if (cause.equalsIgnoreCase("NOT_GIVING_RIGHT_OF_WAY")) {
             ans = TrafficTicketEnum.NOT_GIVING_RIGHT_OF_WAY;
         }
         return ans;
     }
 
     public Accident addNewAccident(long driver_id, long vehicle_id, String city, String street, String driverLicense, String driverName,
-                                   String otherDriverId, String carType, String carColor, String carNumber, String insuranceCompany)
-    {
+                                   String otherDriverId, String carType, String carColor, String carNumber, String insuranceCompany) {
         Driver driver = driverRepository.findOne(driver_id);
-        if (driver==null)
+        if (driver == null)
             return null;
         Vehicle vehicle = vehicleRepository.findOne(vehicle_id);
-        if (vehicle==null)
+        if (vehicle == null)
             return null;
-        return eventRepository.save(new Accident(driver,vehicle,city,street,driverLicense,driverName,otherDriverId,carType,carColor,carNumber,insuranceCompany));
+        return eventRepository.save(new Accident(driver, vehicle, city, street, driverLicense, driverName, otherDriverId, carType, carColor, carNumber, insuranceCompany));
     }
+
+
+    public List<Training> findTrainingsForDriver(long driverId) {
+        Driver driver = driverRepository.findOne(driverId);
+
+        List<Enrollment> enrollments = driver.getEnrollments();
+        List<Training> returnedList = new LinkedList<>();
+        for (Enrollment enrollment : enrollments) {
+            returnedList.add(enrollment.getTraining());
+        }
+        return returnedList;
+
+    }
+
+    public Enrollment registerDriverToTraining(long driverId, long trainingId) {
+        Driver driver = driverRepository.findOne(driverId);
+        Training training = trainingRepository.findOne(trainingId);
+        return enrollmentRepository.save(new Enrollment(driver, training));
+    }
+
+    public Boolean deleteDriverFromTraining(long driverId, long trainingId) {
+
+        Driver driver = driverRepository.findOne(driverId);
+        Training training = trainingRepository.findOne(trainingId);
+        boolean ans = false;
+//        enrollmentRepository.findByDriver(driver).stream().filter(enrollments -> {
+//            if (enrollments.getTraining().equals(training)) {
+//                enrollmentRepository.delete(enrollments);
+//
+//            }
+//
+//        });
+        List<Enrollment> enrollmentList = enrollmentRepository.findByDriver(driver);
+        for (Enrollment enrollment : enrollmentList) {
+            if (enrollment.getTraining().equals(training)) {
+                enrollmentRepository.delete(enrollment);
+                ans = true;
+                break;
+            }
+        }
+
+        return ans;
+    }
+
+    public Boolean deleteEventForDriver(long eventId) {
+
+
+        Event event = eventRepository.findOne(eventId);
+        if (event ==null)
+        {
+            System.out.println("NO such event Found");
+            return false;
+        }
+        eventRepository.delete(eventId);
+
+        return true;
+    }
+
+    public Boolean deleteTraining(long trainingId) {
+        Training training = trainingRepository.findOne(trainingId);
+        if (training ==null)
+        {
+            System.out.println("NO such training Found");
+            return false;
+        }
+        trainingRepository.delete(trainingId);
+
+        return true;
+    }
+
+//    public Training addTraining(Training training) {
+//        return trainingRepository.save(training);
+//    }
 }
+

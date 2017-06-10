@@ -1,5 +1,7 @@
 package com.example.Transportation.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 /**
@@ -15,12 +17,12 @@ public class Enrollment {
     @Id
     private Long training_id;
 
-
+    @JsonBackReference
     @ManyToOne(fetch= FetchType.EAGER)
     @JoinColumn(name="driver_id",insertable = false, updatable = false)
     private Driver driver;
 
-
+    @JsonBackReference
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="training_id",insertable = false, updatable = false)
     private Training training;

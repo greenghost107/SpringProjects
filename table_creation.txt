@@ -73,13 +73,13 @@ CREATE TABLE training
 CREATE TABLE enrollment
 (
   driver_id integer NOT NULL,
-  id integer NOT NULL,
-  CONSTRAINT enrollment_pkey PRIMARY KEY (driver_id, id),
+  training_id integer NOT NULL,
+  CONSTRAINT enrollment_pkey PRIMARY KEY (driver_id, training_id),
   CONSTRAINT driver_id_fk FOREIGN KEY (driver_id)
       REFERENCES driver (driver_id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT training_id_fk FOREIGN KEY (id)
-      REFERENCES training (id) MATCH SIMPLE
+  CONSTRAINT training_id_fk FOREIGN KEY (training_id)
+      REFERENCES training (training_id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH (

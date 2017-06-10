@@ -49,8 +49,7 @@ public class Driver {
         this.name = name;
     }
 
-//    public void registerTraining(Training training) {
-//        trainings.add(training);
-//    }
-
+    public List<Enrollment> getEnrollments() {
+        return enrollments;
+    }
 }

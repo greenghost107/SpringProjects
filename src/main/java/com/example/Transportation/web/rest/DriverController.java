@@ -1,5 +1,6 @@
 package com.example.Transportation.web.rest;
 
+import com.example.Transportation.domain.Enrollment;
 import com.example.Transportation.exception.DriverNotFoundException;
 import com.example.Transportation.exception.SpringException;
 import com.example.Transportation.domain.Driver;
@@ -53,6 +54,18 @@ public class DriverController {
     public ResponseEntity<Driver> deleteDriver(@PathVariable("name") String driverName)
     {
         return new ResponseEntity<>(service.deleteDriverByName(driverName),HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{driverId}/{trainingId}",method = RequestMethod.POST)
+    public ResponseEntity<Enrollment> registerDriverToTraining(@PathVariable("driverId") long driverId,@PathVariable("trainingId") long trainingId)
+    {
+        return new ResponseEntity<>(service.registerDriverToTraining(driverId,trainingId),HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{driverId}/{trainingId}",method = RequestMethod.DELETE)
+    public ResponseEntity<Boolean> deleteDriverFromTraining(@PathVariable("driverId") long driverId,@PathVariable("trainingId") long trainingId)
+    {
+        return new ResponseEntity<>(service.deleteDriverFromTraining(driverId,trainingId),HttpStatus.OK);
     }
 
 }

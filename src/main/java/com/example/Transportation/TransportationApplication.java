@@ -1,10 +1,7 @@
 package com.example.Transportation;
 
 import com.example.Transportation.domain.*;
-import com.example.Transportation.repository.DriverRepository;
-import com.example.Transportation.repository.EventRepository;
-import com.example.Transportation.repository.TrainingRepository;
-import com.example.Transportation.repository.VehicleRepository;
+import com.example.Transportation.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,7 +20,8 @@ public class TransportationApplication {
 	}
 
 	@Bean
-	public CommandLineRunner demo(DriverRepository driverRepository, VehicleRepository vehicleRepository, EventRepository eventRepository, TrainingRepository trainingRepository){
+	public CommandLineRunner demo(DriverRepository driverRepository, VehicleRepository vehicleRepository, EventRepository eventRepository, TrainingRepository trainingRepository,
+								  EnrollmentRepository enrollmentRepository){
 		return (args)->
 		{
 			//clear the db
@@ -38,6 +36,9 @@ public class TransportationApplication {
 
 			if (trainingRepository.count()>0)
 				trainingRepository.deleteAll();
+
+			if (enrollmentRepository.count()>0)
+				enrollmentRepository.deleteAll();
 
 
 			driverRepository.save(new Driver("avi"));
@@ -58,8 +59,11 @@ public class TransportationApplication {
 
 			eventRepository.save(new Accident(driver,vehicle,"Be'er Sheva","Ernest Simon","","AbNaseraladin","8585466","Meclaren","Red","87-89-882","bituah yashir"));
 
+			trainingRepository.save(new Training("bilbul moah",new Date(117,2,15)));
 			Training training = trainingRepository.save(new Training("continuing education program",new Date(117,4,1)));
-//			driver.registerTraining(training);
+			enrollmentRepository.save(new Enrollment(driver,training));
+			driver = driverRepository.findByName("sami").get(0);
+			enrollmentRepository.save(new Enrollment(driver,training));
 
 
 		};
