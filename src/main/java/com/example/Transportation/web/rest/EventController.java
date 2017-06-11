@@ -2,7 +2,8 @@ package com.example.Transportation.web.rest;
 
 import com.example.Transportation.domain.*;
 import com.example.Transportation.exception.SpringException;
-import com.example.Transportation.service.ServiceImplementation;
+import com.example.Transportation.service.EventService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.DiscriminatorValue;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,11 +26,11 @@ public class EventController {
     private static final Logger log = LoggerFactory.getLogger(EventController.class);
 
     @Autowired
-    ServiceImplementation service;
+    EventService eventService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<Event>> showAllEvents() {
-        return Optional.ofNullable(service.findAllEvents())
+        return Optional.ofNullable(eventService.findAllEvents())
                 .map(driver -> new ResponseEntity<>(driver, HttpStatus.OK))
                 .orElseThrow(() -> new SpringException("no Events In Drivers DB"));
 
@@ -36,14 +39,14 @@ public class EventController {
     //	Show events of type X and driver Y (x,y are parameters)
     @RequestMapping(value = "/getspecific", method = RequestMethod.GET)
     public ResponseEntity<List<Event>> showEventsOfTypeXandDriverY(@RequestParam(name = "event") String eventType, @RequestParam(name = "driver_name") String driver_name) {
-        return Optional.ofNullable(service.findEventsByEventTypeAndDriver(eventType, driver_name))
+        return Optional.ofNullable(eventService.findEventsByEventTypeAndDriver(eventType, driver_name))
                 .map(event -> new ResponseEntity<>(event, HttpStatus.OK))
                 .orElseThrow(() -> new SpringException("no " + eventType + " were found in Events DB"));
     }
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public ResponseEntity<List<Event>> getAllEventsFromType(@RequestParam(name = "event") String eventType) {
-        return Optional.ofNullable(service.findAllEventsOfTypes(eventType))
+        return Optional.ofNullable(eventService.findAllEventsOfTypes(eventType))
                 .map(event -> new ResponseEntity<>(event, HttpStatus.OK))
                 .orElseThrow(() -> new SpringException("no " + eventType + " were found in Events DB"));
     }
@@ -56,7 +59,7 @@ public class EventController {
                                             @RequestParam String street,
                                             @RequestParam float fine,
                                             @RequestParam String reasonForTicket) {
-        return Optional.ofNullable(service.addTicket(driver_id, vehicle_id, city, street, fine, reasonForTicket))
+        return Optional.ofNullable(eventService.addTicket(driver_id, vehicle_id, city, street, fine, reasonForTicket))
                 .map(ticket -> new ResponseEntity<>(ticket, HttpStatus.OK))
                 .orElseThrow(() -> new SpringException("Couldn't add Ticket"));
     }
@@ -70,7 +73,7 @@ public class EventController {
                                                           @RequestParam float fine,
                                                           @RequestParam String reasonForTicket,
                                                           @RequestParam String cause) {
-        return Optional.ofNullable(service.addTrafficTicket(driver_id, vehicle_id, city, street, fine, reasonForTicket, cause))
+        return Optional.ofNullable(eventService.addTrafficTicket(driver_id, vehicle_id, city, street, fine, reasonForTicket, cause))
                 .map(trafficTicket -> new ResponseEntity<>(trafficTicket, HttpStatus.OK))
                 .orElseThrow(() -> new SpringException("Couldn't add Ticket"));
     }
@@ -88,7 +91,7 @@ public class EventController {
                                                 @RequestParam String carNumber,
                                                 @RequestParam String insuranceCompany)
     {
-        return Optional.ofNullable(service.addNewAccident(driver_id, vehicle_id, city, street, driverLicense,driverName,otherDriverId,carType,carColor,carNumber,insuranceCompany))
+        return Optional.ofNullable(eventService.addNewAccident(driver_id, vehicle_id, city, street, driverLicense,driverName,otherDriverId,carType,carColor,carNumber,insuranceCompany))
                 .map(trafficTicket -> new ResponseEntity<>(trafficTicket, HttpStatus.OK))
                 .orElseThrow(() -> new SpringException("Couldn't add Accident"));
     }
@@ -96,7 +99,16 @@ public class EventController {
     @RequestMapping(value = "/{eventId}",method = RequestMethod.DELETE)
     public ResponseEntity<Boolean> deleteDriverFromTraining(@PathVariable("eventId") long eventId)
     {
-        return new ResponseEntity<>(service.deleteEventForDriver(eventId),HttpStatus.OK);
+        return new ResponseEntity<>(eventService.deleteEventForDriver(eventId),HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/breakdown",method = RequestMethod.GET)
+    public ResponseEntity<HashMap<String,Float>> calcEventBreakdown(){
+        return Optional.ofNullable(eventService.calcBreakdown())
+                .map(trafficTicket -> new ResponseEntity<>(trafficTicket, HttpStatus.OK))
+                .orElseThrow(() -> new SpringException("Couldn't add Accident"));
+    }
+
+
 
 }

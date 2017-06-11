@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -58,12 +59,13 @@ public class TransportationApplication {
 			eventRepository.save(new TrafficTicket(driver,vehicle,"Be'er Sheva","Ernest Simon", (float) 54.5,"interrupted the traffic",TrafficTicketEnum.RED_LIGHT_CROSSING));
 
 			eventRepository.save(new Accident(driver,vehicle,"Be'er Sheva","Ernest Simon","","AbNaseraladin","8585466","Meclaren","Red","87-89-882","bituah yashir"));
-
-			trainingRepository.save(new Training("bilbul moah",new Date(117,2,15)));
-			Training training = trainingRepository.save(new Training("continuing education program",new Date(117,4,1)));
+			LocalDate localDate = LocalDate.of(2017,2,15);
+			trainingRepository.save(new Training("bilbul moah",localDate));
+			Training training = trainingRepository.save(new Training("continuing education program",LocalDate.of(2017,4,1)));
 			enrollmentRepository.save(new Enrollment(driver,training));
 			driver = driverRepository.findByName("sami").get(0);
 			enrollmentRepository.save(new Enrollment(driver,training));
+
 
 
 		};

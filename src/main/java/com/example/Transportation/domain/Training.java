@@ -1,6 +1,7 @@
 package com.example.Transportation.domain;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -19,14 +20,14 @@ public class Training {
 
     private String description;
 
-    private Date dateOfTraining;
+    private LocalDate dateOfTraining;
 
     @OneToMany(mappedBy="training",targetEntity = Enrollment.class,cascade = CascadeType.REMOVE)
     private List<Enrollment> enrollments;
 
     public Training(){}
 
-    public Training(String description,Date date)
+    public Training(String description,LocalDate date)
     {
         this.description = description;
         this.dateOfTraining = date;
@@ -48,11 +49,11 @@ public class Training {
         this.description = description;
     }
 
-    public Date getDateOfTraining() {
+    public LocalDate getDateOfTraining() {
         return dateOfTraining;
     }
 
-    public void setDateOfTraining(Date dateOfTraining) {
+    public void setDateOfTraining(LocalDate dateOfTraining) {
         this.dateOfTraining = dateOfTraining;
     }
 }

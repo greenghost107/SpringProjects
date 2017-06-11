@@ -52,4 +52,8 @@ public class Driver {
     public List<Enrollment> getEnrollments() {
         return enrollments;
     }
+
+    public List<Event> getEvents() {
+        return events;
+    }
 }

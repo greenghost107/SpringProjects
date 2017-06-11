@@ -2,13 +2,16 @@ package com.example.Transportation.web.rest;
 
 import com.example.Transportation.domain.Vehicle;
 import com.example.Transportation.exception.SpringException;
-import com.example.Transportation.service.ServiceImplementation;
+import com.example.Transportation.service.VehicleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,11 +26,11 @@ public class VehicleController {
     private static final Logger log = LoggerFactory.getLogger(EventController.class);
 
     @Autowired
-    ServiceImplementation service;
+    VehicleService vehicleService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<Vehicle>> showAllVehicles() {
-        return Optional.ofNullable(service.findAllVehicles())
+        return Optional.ofNullable(vehicleService.findAllVehicles())
                 .map(driver -> new ResponseEntity<>(driver, HttpStatus.OK))
                 .orElseThrow(() -> new SpringException("no Vehicles In Drivers DB"));
     }
@@ -35,12 +38,12 @@ public class VehicleController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Vehicle> addVehicle(@RequestParam String vehicleName, @RequestParam String licenseplate)
     {
-        return new ResponseEntity<>(service.addVehicleByName(vehicleName,licenseplate),HttpStatus.OK);
+        return new ResponseEntity<>(vehicleService.addVehicleByName(vehicleName,licenseplate),HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity<Vehicle> deleteVehicleByName(@RequestParam String vehicleName)
     {
-        return new ResponseEntity<>(service.deleteVehicleByName(vehicleName),HttpStatus.OK);
+        return new ResponseEntity<>(vehicleService.deleteVehicleByName(vehicleName),HttpStatus.OK);
     }
 }
