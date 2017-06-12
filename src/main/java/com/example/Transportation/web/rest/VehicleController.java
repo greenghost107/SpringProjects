@@ -35,15 +35,28 @@ public class VehicleController {
                 .orElseThrow(() -> new SpringException("no Vehicles In Drivers DB"));
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Vehicle> addVehicle(@RequestParam String vehicleName, @RequestParam String licenseplate)
-    {
-        return new ResponseEntity<>(vehicleService.addVehicleByName(vehicleName,licenseplate),HttpStatus.OK);
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public ResponseEntity<Vehicle> addVehicle(@RequestParam("vehicleName") String vehicleName, @RequestParam("licenseplate") String licenseplate) {
+        Vehicle vehicle = vehicleService.addVehicleByName(vehicleName, licenseplate);
+        if (vehicle ==null){
+            log.warn("Could Not add vehicle to db");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }else{
+            log.info("Added Vehicle to DB");
+            return new ResponseEntity<Vehicle>(vehicle,HttpStatus.OK);
+        }
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
-    public ResponseEntity<Vehicle> deleteVehicleByName(@RequestParam String vehicleName)
-    {
-        return new ResponseEntity<>(vehicleService.deleteVehicleByName(vehicleName),HttpStatus.OK);
+    public ResponseEntity<Vehicle> deleteVehicleByName(@RequestParam("vehicleName") String vehicleName) {
+        Vehicle vehicle = vehicleService.deleteVehicleByName(vehicleName);
+        if (vehicle == null) {
+            log.warn("could not delete the vehicle {} from DB");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            log.info("Deleted protector {} from DB", vehicle.getName());
+            return new ResponseEntity<>(vehicle, HttpStatus.OK);
+
+        }
     }
 }

@@ -1,15 +1,18 @@
 package com.example.Transportation.domain;
 
+import com.example.Transportation.config.LocalDateTimeDeserializer;
+import com.example.Transportation.config.LocalDateTimeSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Michael on 6/6/2017.
  */
 @Entity
-//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class,property = "@training")
 @Table(name="training")
 public class Training {
 
@@ -20,6 +23,8 @@ public class Training {
 
     private String description;
 
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDate dateOfTraining;
 
     @OneToMany(mappedBy="training",targetEntity = Enrollment.class,cascade = CascadeType.REMOVE)

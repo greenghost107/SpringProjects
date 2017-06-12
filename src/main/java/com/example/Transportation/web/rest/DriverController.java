@@ -49,25 +49,51 @@ public class DriverController {
     @RequestMapping(value = "/{name}",method = RequestMethod.POST)
     public ResponseEntity<Driver> addDriver(@PathVariable("name") String driverName)
     {
-        return new ResponseEntity<>(driverService.addDriverByName(driverName),HttpStatus.OK);
+        Driver driver = driverService.addDriverByName(driverName);
+        if (driver==null)
+        {
+            log.warn("Couldn't add driver with name " + driverName);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(driver,HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{name}",method = RequestMethod.DELETE)
     public ResponseEntity<Driver> deleteDriver(@PathVariable("name") String driverName)
     {
-        return new ResponseEntity<>(driverService.deleteDriverByName(driverName),HttpStatus.OK);
+        Driver driver = driverService.deleteDriverByName(driverName);
+        if (driver==null)
+        {
+            log.warn("Couldn't delete driver with name " + driverName);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(driver,HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{driverId}/{trainingId}",method = RequestMethod.POST)
     public ResponseEntity<Enrollment> registerDriverToTraining(@PathVariable("driverId") long driverId,@PathVariable("trainingId") long trainingId)
     {
-        return new ResponseEntity<>(driverService.registerDriverToTraining(driverId,trainingId),HttpStatus.OK);
+        Enrollment enrollment = driverService.registerDriverToTraining(driverId,trainingId);
+        if (enrollment==null)
+        {
+            log.warn("Couldn't register driver " + driverId + " to training " + trainingId );
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(enrollment,HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{driverId}/{trainingId}",method = RequestMethod.DELETE)
     public ResponseEntity<Boolean> deleteDriverFromTraining(@PathVariable("driverId") long driverId,@PathVariable("trainingId") long trainingId)
     {
-        return new ResponseEntity<>(driverService.deleteDriverFromTraining(driverId,trainingId),HttpStatus.OK);
+        Boolean ans = driverService.deleteDriverFromTraining(driverId,trainingId);
+        if (ans ==false)
+        {
+            log.warn("Couldn't delete driver " + driverId + " from training " + trainingId );
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(ans,HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{driverId}/calcBonus",method = RequestMethod.GET)

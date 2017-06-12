@@ -40,8 +40,6 @@ public class TrainingService {
         return true;
     }
 
-
-
     public Training addTraining(Training training) {
         return trainingRepository.save(training);
     }

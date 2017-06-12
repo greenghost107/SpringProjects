@@ -20,6 +20,12 @@ public class VehicleService {
     @Autowired
     VehicleRepository vehicleRepository;
 
+
+    public List<Vehicle> findAllVehicles() {
+        log.info("Started findAllEvents");
+        return vehicleRepository.findAll();
+    }
+
     @Transactional
     public Vehicle deleteVehicleByName(String vehicleName) {
         List<Vehicle> vehicleList = vehicleRepository.findByName(vehicleName);
@@ -46,7 +52,9 @@ public class VehicleService {
             System.out.println("Please supply A License Plate");
             return null;
         }
-        return vehicleRepository.save(new Vehicle(vehicleName, licenseplate));
+        Vehicle vehicle = new Vehicle(vehicleName, licenseplate);
+        vehicleRepository.save(vehicle);
+        return vehicle;
 
     }
 
@@ -54,9 +62,6 @@ public class VehicleService {
         return name.matches("[a-zA-Z]+");
     }
 
-    public List<Vehicle> findAllVehicles() {
-        log.info("Started findAllEvents");
-        return vehicleRepository.findAll();
-    }
+
 }
 
