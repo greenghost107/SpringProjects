@@ -3,6 +3,8 @@ package com.example.Transportation.service;
 import com.example.Transportation.TransportationApplication;
 import com.example.Transportation.domain.Vehicle;
 import com.example.Transportation.repository.VehicleRepository;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,18 @@ public class VehicleServiceTest {
 
     @Autowired
     private VehicleService vehicleService;
+
+    @Before
+    private void setup(){
+        //insert requested
+        //todo - tests are incorrect, here we need to insert data to the db
+    }
+
+    @After
+    private void end(){
+        //delete inserted
+        //here we need to clean the repo
+    }
 
     @Test
     public void findAllVehicles() throws Exception {

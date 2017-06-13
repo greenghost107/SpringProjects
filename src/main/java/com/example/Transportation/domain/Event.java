@@ -6,29 +6,25 @@ import javax.persistence.*;
  * Created by Michael on 6/4/2017.
  */
 @Entity
-//@IdClass(EventId.class)
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public class Event {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
-//    @Id
     private Long driver_id;
-//
-//    @Id
     private Long vehicle_id;
 
     private String city;
 
     private String street;
 
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name="driver_id",insertable = false, updatable = false)
     private Driver driver;
 
 
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name="vehicle_id",insertable = false, updatable = false)
     private Vehicle vehicle;
 

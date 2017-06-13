@@ -1,4 +1,4 @@
-package com.example.Transportation.util;
+package com.example.Transportation.utils;
 
 import io.github.benas.randombeans.api.EnhancedRandom;
 import org.springframework.beans.factory.annotation.Autowired;

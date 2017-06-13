@@ -1,4 +1,4 @@
-package com.example.Transportation.config;
+package com.example.Transportation.util;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 /**
  * Created by Michael on 6/12/2017.
  */
-public class LocalDateTimeSerializer extends JsonSerializer<LocalDate> {
+public class LocalDateSerializer extends JsonSerializer<LocalDate> {
     @Override
     public void serialize(LocalDate arg0, JsonGenerator arg1, SerializerProvider arg2) throws IOException, JsonProcessingException {
         arg1.writeString(arg0.toString());

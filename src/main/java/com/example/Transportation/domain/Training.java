@@ -1,7 +1,7 @@
 package com.example.Transportation.domain;
 
-import com.example.Transportation.config.LocalDateTimeDeserializer;
-import com.example.Transportation.config.LocalDateTimeSerializer;
+import com.example.Transportation.util.LocalDateDeserializer;
+import com.example.Transportation.util.LocalDateSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -23,8 +23,8 @@ public class Training {
 
     private String description;
 
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate dateOfTraining;
 
     @OneToMany(mappedBy="training",targetEntity = Enrollment.class,cascade = CascadeType.REMOVE)

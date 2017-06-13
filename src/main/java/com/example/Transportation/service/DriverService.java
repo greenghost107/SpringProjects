@@ -87,6 +87,7 @@ public class DriverService {
 
     private int pointsDeductedForEvent(String event)
     {
+        //TODO - netali - switch case
         int returnVal = 0;
         if (event.equalsIgnoreCase("Accident")){
             returnVal =3;
